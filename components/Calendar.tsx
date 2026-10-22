@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { formatLong, formatShort, toKey, todayKey } from '@/lib/dates'
+import { DATE_LOCALE, formatLong, formatShort, toKey, todayKey } from '@/lib/dates'
 import { ASSESSMENT_LABELS, type AssessmentType, type Assignment, type Subtask } from '@/lib/types'
 
 type CalEvent = {
@@ -71,7 +71,7 @@ export default function Calendar({ assignments, subtasks }: { assignments: Assig
       .slice(0, 8)
   }, [byDate, today])
 
-  const monthLabel = cursor.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
+  const monthLabel = cursor.toLocaleDateString(DATE_LOCALE, { month: 'long', year: 'numeric' })
   const selectedEvents = byDate.get(selected) ?? []
 
   function shiftMonth(delta: number) {

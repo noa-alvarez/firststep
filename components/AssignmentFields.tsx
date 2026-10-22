@@ -1,15 +1,23 @@
 'use client'
 
-import { ASSESSMENT_LABELS, ASSESSMENT_TYPES, type AssessmentType } from '@/lib/types'
+import {
+  ASSESSMENT_LABELS,
+  ASSESSMENT_TYPES,
+  PRIORITIES,
+  PRIORITY_LABELS,
+  type AssessmentType,
+  type Priority,
+} from '@/lib/types'
 
 export type DetailValues = {
   course: string
   deadline: string
   assessment_type: AssessmentType
+  priority: Priority
   notes: string
 }
 
-export const EMPTY_DETAILS: DetailValues = { course: '', deadline: '', assessment_type: 'assignment', notes: '' }
+export const EMPTY_DETAILS: DetailValues = { course: '', deadline: '', assessment_type: 'assignment', priority: 'normal', notes: '' }
 
 // The optional fields shared by the "new assignment" and "edit assignment" forms.
 export default function AssignmentFields({
@@ -52,6 +60,18 @@ export default function AssignmentFields({
         >
           {ASSESSMENT_TYPES.map((t) => (
             <option key={t} value={t}>{ASSESSMENT_LABELS[t]}</option>
+          ))}
+        </select>
+      </div>
+      <div className="field">
+        <label htmlFor={`${idPrefix}-priority`}>Priority</label>
+        <select
+          id={`${idPrefix}-priority`}
+          value={values.priority}
+          onChange={(e) => onChange({ ...values, priority: e.target.value as Priority })}
+        >
+          {PRIORITIES.map((p) => (
+            <option key={p} value={p}>{PRIORITY_LABELS[p]}</option>
           ))}
         </select>
       </div>

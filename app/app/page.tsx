@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 import Dashboard from '@/components/Dashboard'
 import { createClient } from '@/lib/supabase/server'
 
@@ -12,5 +13,9 @@ export default async function AppPage() {
   } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  return <Dashboard />
+  return (
+    <Suspense>
+      <Dashboard />
+    </Suspense>
+  )
 }

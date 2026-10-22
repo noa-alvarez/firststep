@@ -1,5 +1,8 @@
 // Dates are stored as plain YYYY-MM-DD strings and handled in the user's local time zone.
 
+// The interface is in English, so dates are too, whatever the browser's language.
+export const DATE_LOCALE = 'en-GB'
+
 const pad = (n: number) => String(n).padStart(2, '0')
 
 export function toKey(d: Date): string {
@@ -22,11 +25,11 @@ export function daysUntil(key: string): number {
 }
 
 export function formatShort(key: string): string {
-  return fromKey(key).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  return fromKey(key).toLocaleDateString(DATE_LOCALE, { month: 'short', day: 'numeric' })
 }
 
 export function formatLong(key: string): string {
-  return fromKey(key).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })
+  return fromKey(key).toLocaleDateString(DATE_LOCALE, { weekday: 'long', month: 'long', day: 'numeric' })
 }
 
 export function relativeDue(key: string): { text: string; tone: 'overdue' | 'soon' | 'later' } {

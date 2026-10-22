@@ -4,7 +4,7 @@ import { useState, type FormEvent } from 'react'
 import AssignmentFields, { type DetailValues } from './AssignmentFields'
 import SubtaskList from './SubtaskList'
 import { relativeDue } from '@/lib/dates'
-import { ASSESSMENT_LABELS, type Assignment, type AssignmentPatch, type Subtask, type SubtaskPatch } from '@/lib/types'
+import { ASSESSMENT_LABELS, PRIORITY_LABELS, type Assignment, type AssignmentPatch, type Subtask, type SubtaskPatch } from '@/lib/types'
 
 type Props = {
   assignment: Assignment
@@ -54,6 +54,7 @@ export default function AssignmentCard(props: Props) {
       course: details.course.trim() || null,
       deadline: details.deadline || null,
       assessment_type: details.assessment_type,
+      priority: details.priority,
       notes: details.notes.trim() || null,
     })
     setSaving(false)
@@ -65,6 +66,12 @@ export default function AssignmentCard(props: Props) {
       <div className="assignment-head">
         <div className="assignment-meta">
           <span className={`badge badge-${a.assessment_type}`}>{ASSESSMENT_LABELS[a.assessment_type]}</span>
+          {a.priority !== 'normal' && (
+            <span className={`priority priority-${a.priority}`}>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h2v16H5zm2 1h9l-2.5 4L16 11H7z" /></svg>
+              {PRIORITY_LABELS[a.priority]} priority
+            </span>
+          )}
           {a.course && <span className="meta-course">{a.course}</span>}
           {due && <span className={`pill pill-${allDone ? 'later' : due.tone}`}>{due.text}</span>}
         </div>
@@ -151,6 +158,7 @@ function toDetails(a: Assignment): DetailValues {
     course: a.course ?? '',
     deadline: a.deadline ?? '',
     assessment_type: a.assessment_type,
+    priority: a.priority ?? 'normal',
     notes: a.notes ?? '',
   }
 }

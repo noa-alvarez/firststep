@@ -15,6 +15,8 @@ create table if not exists public.assignments (
   notes           text check (notes is null or char_length(notes) <= 5000),
   assessment_type text not null default 'assignment'
                   check (assessment_type in ('assignment', 'midterm', 'final', 'group_project')),
+  priority        text not null default 'normal'
+                  constraint assignments_priority_check check (priority in ('high', 'normal', 'low')),
   created_at      timestamptz not null default now(),
   updated_at      timestamptz not null default now(),
   -- lets subtasks reference (id, user_id) so a subtask can never point at someone else's assignment
@@ -34,6 +36,12 @@ create table if not exists public.subtasks (
   foreign key (assignment_id, user_id)
     references public.assignments (id, user_id) on delete cascade
 );
+
+-- For databases created before priority existed (same as migrations/002_add_priority.sql)
+alter table public.assignments add column if not exists priority text not null default 'normal';
+alter table public.assignments drop constraint if exists assignments_priority_check;
+alter table public.assignments
+  add constraint assignments_priority_check check (priority in ('high', 'normal', 'low'));
 
 create index if not exists assignments_user_id_idx on public.assignments (user_id);
 create index if not exists subtasks_user_id_idx on public.subtasks (user_id);
